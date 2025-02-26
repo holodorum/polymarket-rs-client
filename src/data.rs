@@ -3,6 +3,7 @@ use crate::Decimal;
 use crate::SignedOrderRequest;
 use alloy_primitives::U256;
 use serde::{Deserialize, Deserializer, Serialize};
+use serde_json::Value;
 use std::fmt::Display;
 use std::str::FromStr;
 
@@ -326,4 +327,72 @@ pub struct ApiCreds {
     pub api_key: String,
     pub secret: String,
     pub passphrase: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MarketsResponse {
+    pub limit: Decimal,
+    pub count: Decimal,
+    pub next_cursor: Option<String>,
+    pub data: Vec<Market>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SimplifiedMarketsResponse {
+    pub limit: Decimal,
+    pub count: Decimal,
+    pub next_cursor: Option<String>,
+    pub data: Vec<SimplifiedMarket>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Market {
+    pub condition_id: String,
+    pub tokens: [Token; 2],
+    pub rewards: Rewards,
+    pub min_incentive_size: Option<String>,
+    pub max_incentive_spread: Option<String>,
+    pub active: bool,
+    pub closed: bool,
+
+    pub question_id: String,
+    pub minimum_order_size: Decimal,
+    pub minimum_tick_size: Decimal,
+    pub description: String,
+    pub category: Option<String>,
+    pub end_date_iso: Option<String>,
+    pub game_start_time: Option<String>,
+    pub question: String,
+    pub market_slug: String,
+    pub seconds_delay: Decimal,
+    pub icon: String,
+    pub fpmm: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SimplifiedMarket {
+    pub condition_id: String,
+    pub tokens: [Token; 2],
+    pub rewards: Rewards,
+    pub min_incentive_size: Option<String>,
+    pub max_incentive_spread: Option<String>,
+    pub active: bool,
+    pub closed: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Token {
+    pub token_id: String,
+    pub outcome: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Rewards {
+    pub rates: Option<Value>,
+    pub min_size: Decimal,
+    pub max_spread: Decimal,
+    pub event_start_date: Option<String>,
+    pub event_end_date: Option<String>,
+    pub in_game_multiplier: Option<Decimal>,
+    pub reward_epoch: Option<Decimal>,
 }

@@ -833,7 +833,7 @@ impl ClobClient {
             .await?)
     }
 
-    pub async fn get_sampling_markets(&self, next_cursor: Option<&str>) -> ClientResult<Value> {
+    pub async fn get_sampling_markets(&self, next_cursor: Option<&str>) -> ClientResult<MarketsResponse> {
         let next_cursor = next_cursor.unwrap_or(INITIAL_CURSOR);
 
         Ok(self
@@ -842,14 +842,14 @@ impl ClobClient {
             .query(&[("next_cursor", next_cursor)])
             .send()
             .await?
-            .json::<Value>()
+            .json::<MarketsResponse>()
             .await?)
     }
 
     pub async fn get_sampling_simplified_markets(
         &self,
         next_cursor: Option<&str>,
-    ) -> ClientResult<Value> {
+    ) -> ClientResult<SimplifiedMarketsResponse> {
         let next_cursor = next_cursor.unwrap_or(INITIAL_CURSOR);
 
         Ok(self
@@ -858,11 +858,11 @@ impl ClobClient {
             .query(&[("next_cursor", next_cursor)])
             .send()
             .await?
-            .json::<Value>()
+            .json::<SimplifiedMarketsResponse>()
             .await?)
     }
 
-    pub async fn get_markets(&self, next_cursor: Option<&str>) -> ClientResult<Value> {
+    pub async fn get_markets(&self, next_cursor: Option<&str>) -> ClientResult<MarketsResponse> {
         let next_cursor = next_cursor.unwrap_or(INITIAL_CURSOR);
 
         Ok(self
@@ -871,11 +871,14 @@ impl ClobClient {
             .query(&[("next_cursor", next_cursor)])
             .send()
             .await?
-            .json::<Value>()
+            .json::<MarketsResponse>()
             .await?)
     }
 
-    pub async fn get_simplified_markets(&self, next_cursor: Option<&str>) -> ClientResult<Value> {
+    pub async fn get_simplified_markets(
+        &self,
+        next_cursor: Option<&str>,
+    ) -> ClientResult<SimplifiedMarketsResponse> {
         let next_cursor = next_cursor.unwrap_or(INITIAL_CURSOR);
 
         Ok(self
@@ -884,17 +887,17 @@ impl ClobClient {
             .query(&[("next_cursor", next_cursor)])
             .send()
             .await?
-            .json::<Value>()
+            .json::<SimplifiedMarketsResponse>()
             .await?)
     }
 
-    pub async fn get_market(&self, condition_id: &str) -> ClientResult<Value> {
+    pub async fn get_market(&self, condition_id: &str) -> ClientResult<Market> {
         Ok(self
             .http_client
             .get(format!("{}/markets/{condition_id}", &self.host))
             .send()
             .await?
-            .json::<Value>()
+            .json::<Market>()
             .await?)
     }
 
